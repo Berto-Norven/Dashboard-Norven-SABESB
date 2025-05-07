@@ -42,7 +42,7 @@ else:
 
 
 st.set_page_config(
-    page_title="Dashboard de Índices de Saneamento",
+    page_title="Dashboard Norven: Índices",
     page_icon="💧",
     layout="wide",
 )
@@ -126,7 +126,7 @@ elif st.session_state.active_tab == 'Análises específicas':
 elif st.session_state.active_tab == 'Sobre':
 
     #with st.sidebar:
-        gif_path = r"C:\Users\pedro.NORVEN\Desktop\DashBoard_SABESB\imagens\animação-logo-e-frase.gif"  # Caminho local para o GIF
+        gif_path = r"animação-logo-e-frase.gif"  # Caminho local para o GIF
 
         with open(gif_path, "rb") as f:
             data = f.read()
