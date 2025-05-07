@@ -1,5 +1,5 @@
 # Autor: Pedro Lucas Berto - Versão: 01 - Data: 30/04/2025 - Norven
-from idlelib.multicall import MC_ENTER
+#from idlelib.multicall import MC_ENTER
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
