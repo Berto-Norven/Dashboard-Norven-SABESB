@@ -58,9 +58,9 @@ st.session_state.active_tab = st.radio("Escolha uma análise:", guias, horizonta
 
 # Caminhos para leitutra:
 
-caminho_descritivo_indices_atualizacao_monetaria_utilizados = r'C:\Users\pedro.NORVEN\Desktop\DashBoard_SABESB\Arquivos\Tabela_indices_demais_empresas.xlsx'
+caminho_descritivo_indices_atualizacao_monetaria_utilizados = r'Tabela_indices_demais_empresas.xlsx'
 
-caminho_indices_atualizacao_monetaria = r'C:\Users\pedro.NORVEN\Desktop\DashBoard_SABESB\Arquivos\Tabela_indices.xlsx'
+caminho_indices_atualizacao_monetaria = r'Tabela_indices.xlsx'
 
 aba_leitura_caminho_relevancia_indices_atualizacao_monetaria_utilizados = 'Relevância dos índices'
 
