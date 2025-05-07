@@ -105,7 +105,7 @@ def plotar_indice(df,codigo_sap,data_inicial,data_final):
     if 'button' not in st.session_state:
         st.session_state.button = False
     with st.sidebar:
-        st.button('Realizar correlção com Dólar', on_click=abilitar_correlação_dolar)
+        st.button('Realizar correlação com Dólar', on_click=abilitar_correlação_dolar)
     if st.session_state.button:
         codigo_sap =codigo_sap +['Dólar']
         df = df[['Data'] + codigo_sap]
