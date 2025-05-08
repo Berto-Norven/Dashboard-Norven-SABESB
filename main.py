@@ -85,13 +85,10 @@ if st.session_state.active_tab == 'Relevância do índices':
 
     #Ajuste de layout:
     col1,col2 =st.columns([3,2])
-
-
+    
     col_indice = 'índices'
     col_sap = 'Código SAP'
     col_relevancia = 'Relevância'
-
-    # descritivo_resumido = descritivo_indices_atualizacao_monetaria_utilizados.drop(columns=['Relevância', 'Qtd.Empresa'])
 
     grafico_relevancia_indices = grafico_relevancia(relevancia_indices_atualizacao_monetaria_utilizados,col_indice,col_sap,col_relevancia)
 
@@ -115,11 +112,11 @@ elif st.session_state.active_tab == 'Análises específicas':
             descritivo_indices_atualizacao_monetaria_utilizados['índices']
 
     chave_nome_indice_codigo_sap = descritivo_indices_atualizacao_monetaria_utilizados.set_index('índices')[
-            'Código SAP'].to_dict()
+            'Descrição Abreviada'].to_dict()
 
     escolha_indice = escolha_indice(chave_nome_indice_codigo_sap)
 
-    codigo_sap = [chave_nome_indice_codigo_sap[indice] for indice in escolha_indice]
+    codigo_sap = [chave_nome_indice_codigo_sap[indice] for indice in escolha_indice]                                     #Agora recebe o nome abreviado do índice comentário:1
 
     plotar_indice(indices_atualizacao_monetaria, codigo_sap, data_inicial, data_final)
 
@@ -144,6 +141,8 @@ elif st.session_state.active_tab == 'Sobre':
             st.markdown(
                 "<h3 style='color: #1B1B1B; font-family: \"Styrene A Regular\", sans-serif;'>" "Dashboard Norven: Índices de atualização monetária</h3>",
                 unsafe_allow_html=True)
+
+# -------------------------------------------------------------------------------------------------------------------- #
 
 elif st.session_state.active_tab == 'Conclusões Norven':
     
