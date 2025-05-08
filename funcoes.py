@@ -58,15 +58,21 @@ def ler_excel(caminho,nome_aba):
 
 def grafico_relevancia(df,col_indice,col_sap,col_relevancia):
     df.loc[df['Código SAP'] == '-', 'Código SAP'] = df['índices']
-    df['eixo_x'] = 'i- ' + df['Código SAP']
 
+    for i in range(len(df)):
+        if df.at[i, 'índices'] == df.at[i, 'Código SAP']:
+            df.at[i, 'eixo_x'] = df.at[i, 'índices']
+        else:
+            df.at[i, 'eixo_x'] = f"{df.at[i, 'índices']}-{df.at[i, 'Código SAP']}"
+
+    #df['eixo_x'] = df['índices'] + '-' + df['Código SAP']
     #Criar gráfico:
     fig = px.bar(
         df,
         x = 'eixo_x',
         y = col_relevancia,
         text = col_relevancia,
-        labels={col_relevancia: 'Relevância (%)', 'eixo_x': 'Índice - Código SAP'},
+        labels={col_relevancia: 'Relevância (%)', 'eixo_x': 'índice - Código SAP'},
 
     )
     # Ajustes de layout
