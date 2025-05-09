@@ -21,7 +21,8 @@ from streamlit import sidebar
 # -------------------------------------------------------------------------------------------------------------------- #
 
 #Importações adicionais:
-from funcoes import ler_excel, grafico_relevancia,plotar_indice,definicao_periodo,escolha_indice,abilitar_correlação_dolar,grafico_correlação
+from funcoes import ler_excel, grafico_relevancia,plotar_indice,definicao_periodo,escolha_indice,abilitar_correlação_dolar,grafico_correlação,descritivo_especifico
+
 
 
 
@@ -30,26 +31,28 @@ from funcoes import ler_excel, grafico_relevancia,plotar_indice,definicao_period
 
 #Interface:
 if 'active_tab' not in st.session_state:
-    st.session_state.active_tab = 'Sobre'
+    st.session_state.active_tab = 'Página Inicial'
 
 # Expande a sidebar automaticamente ao mudar para "Análises específicas"
 if st.session_state.active_tab == 'Análises específicas':
     st.session_state.sidebar_state = 'expanded'
-elif st.session_state.active_tab == 'Sobre':
+elif st.session_state.active_tab == 'Página Inicial':
+    st.session_state.sidebar_state = 'expanded'
+elif st.session_state.active_tab == 'Descritivo dos índices':
     st.session_state.sidebar_state = 'expanded'
 else:
     st.session_state.sidebar_state = 'collapsed'
 
 
 st.set_page_config(
-    page_title="Dashboard Norven: Índices",
+    page_title="Dashboard de Índices de Saneamento",
     page_icon="💧",
     layout="wide",
 )
 
 
 
-guias = ['Sobre','Relevância do índices','Análises específicas','Conclusões Norven']
+guias = ['Página Inicial','Descritivo dos índices','Relevância do índices','Análises específicas','Conclusões Norven']
 
 st.session_state.active_tab = st.radio("Escolha uma análise:", guias, horizontal=True, label_visibility='collapsed')
 
@@ -61,6 +64,8 @@ st.session_state.active_tab = st.radio("Escolha uma análise:", guias, horizonta
 caminho_descritivo_indices_atualizacao_monetaria_utilizados = r'PLB_Tabela_indices_demais_empresas.xlsx'
 
 caminho_indices_atualizacao_monetaria = r'PLB_Tabela_indices.xlsx'
+
+caminho_detalhamento_indices = r'PLB_indices_economicos_dashboard.xlsx'
 
 aba_leitura_caminho_relevancia_indices_atualizacao_monetaria_utilizados = 'Relevância dos índices'
 
@@ -81,26 +86,31 @@ descritivo_indices_atualizacao_monetaria_utilizados =ler_excel(caminho_descritiv
 conclusoes_norven = ler_excel(caminho_descritivo_indices_atualizacao_monetaria_utilizados,aba_leitura_conclusoes_descritivo_indices_atualizacao_monetaria_utilizados)
 # -------------------------------------------------------------------------------------------------------------------- #
 if st.session_state.active_tab == 'Relevância do índices':
-
-
-    #Ajuste de layout:
-    col1,col2 =st.columns([3,2])
-    
     col_indice = 'índices'
     col_sap = 'Código SAP'
     col_relevancia = 'Relevância'
 
     grafico_relevancia_indices = grafico_relevancia(relevancia_indices_atualizacao_monetaria_utilizados,col_indice,col_sap,col_relevancia)
+    with st.container():
+        with st.expander("ℹ️ Informações"):
+            st.write("""
+            Os dados de relevância foram levantados considerando-se os índices de atualização monetária utilizados nas seguintes empresas:
 
-
-    with col1:
-        st.subheader('Rpresentatividade de alguns índices utilizados na valoração de ativos no setor de saneamento:')
-        st.plotly_chart(grafico_relevancia_indices,use_container_width=True)
-    with col2:
-        st.subheader('Descritivo dos índices:')
-        st.dataframe(descritivo_indices_atualizacao_monetaria_utilizados,hide_index=True,width=500,height=600,row_height=52)
-
-
+            - AGEPAR  
+            - AGR  
+            - ARESC  
+            - AGERGS  
+            - ADASA
+            """)
+    with st.container():
+        col1, col2 = st.columns([3, 2])
+        with col1:
+            st.subheader('Representatividade de alguns índices utilizados na valoração de ativos no setor de saneamento:')
+            st.plotly_chart(grafico_relevancia_indices,use_container_width=True)
+        with col2:
+            st.subheader('Identificação de índices e abreviações:')
+            descritivo_indices_atualizacao_monetaria_utilizados = descritivo_indices_atualizacao_monetaria_utilizados.drop(columns=['Código SAP'])
+            st.dataframe(descritivo_indices_atualizacao_monetaria_utilizados,hide_index=True,width=500,height=600,row_height=52)
 # -------------------------------------------------------------------------------------------------------------------- #
 elif st.session_state.active_tab == 'Análises específicas':
 
@@ -119,11 +129,11 @@ elif st.session_state.active_tab == 'Análises específicas':
     codigo_sap = [chave_nome_indice_codigo_sap[indice] for indice in escolha_indice]                                     #Agora recebe o nome abreviado do índice comentário:1
 
     plotar_indice(indices_atualizacao_monetaria, codigo_sap, data_inicial, data_final)
-
-elif st.session_state.active_tab == 'Sobre':
+# -------------------------------------------------------------------------------------------------------------------- #
+elif st.session_state.active_tab == 'Página Inicial':
 
     #with st.sidebar:
-        gif_path = r"animação-logo-e-frase.gif"  # Caminho local para o GIF
+        gif_path = r"C:\Users\pedro.NORVEN\Desktop\DashBoard_SABESB\animação-logo-e-frase.gif"
 
         with open(gif_path, "rb") as f:
             data = f.read()
@@ -153,6 +163,19 @@ elif st.session_state.active_tab == 'Conclusões Norven':
         height=900,  # define a altura da tabela com scroll se necessário
         row_height=100  # ajusta a altura de cada linha
         )
+# -------------------------------------------------------------------------------------------------------------------- #
+
+elif st.session_state.active_tab == 'Descritivo dos índices':
+    descritivo_indices_atualizacao_monetaria_utilizados.loc[
+        descritivo_indices_atualizacao_monetaria_utilizados['Código SAP'] == '-', 'Código SAP'] = \
+        descritivo_indices_atualizacao_monetaria_utilizados['índices']
+
+    chave_nome_indice_codigo_aba = descritivo_indices_atualizacao_monetaria_utilizados.set_index('índices')[
+        'Código SAP'].to_dict()
+
+    escolha_aba = escolha_indice(chave_nome_indice_codigo_aba)
+    codigo_aba = [chave_nome_indice_codigo_aba[indice] for indice in escolha_aba]
+    descritivo_especifico(caminho_detalhamento_indices,codigo_aba)
 
 
 
