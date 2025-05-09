@@ -133,7 +133,7 @@ elif st.session_state.active_tab == 'Análises específicas':
 elif st.session_state.active_tab == 'Página Inicial':
 
     #with st.sidebar:
-        gif_path = r"C:\Users\pedro.NORVEN\Desktop\DashBoard_SABESB\animação-logo-e-frase.gif"
+        gif_path = r"animação-logo-e-frase.gif"
 
         with open(gif_path, "rb") as f:
             data = f.read()
