@@ -63,7 +63,7 @@ def grafico_relevancia(df,col_indice,col_sap,col_relevancia):
         if df.at[i, 'índices'] == df.at[i, 'Código SAP']:
             df.at[i, 'eixo_x'] = df.at[i, 'índices']
         else:
-            df.at[i, 'eixo_x'] = f"{df.at[i, 'índices']}
+            df.at[i, 'eixo_x'] = df.at[i, 'índices']
 
     #df['eixo_x'] = df['índices'] + '-' + df['Código SAP']
     #Criar gráfico:
