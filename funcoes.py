@@ -63,7 +63,7 @@ def grafico_relevancia(df,col_indice,col_sap,col_relevancia):
         if df.at[i, 'índices'] == df.at[i, 'Código SAP']:
             df.at[i, 'eixo_x'] = df.at[i, 'índices']
         else:
-            df.at[i, 'eixo_x'] = f"{df.at[i, 'índices']}-{df.at[i, 'Código SAP']}"
+            df.at[i, 'eixo_x'] = f"{df.at[i, 'índices']}
 
     #df['eixo_x'] = df['índices'] + '-' + df['Código SAP']
     #Criar gráfico:
@@ -170,6 +170,7 @@ def plotar_indice(df,codigo_sap,data_inicial,data_final):
 
             )
         )
+        df = df.drop(columns=['index'])
         with st.container():
             st.subheader("Gráfico de Variação Acumulada")
             st.plotly_chart(fig_acumulada, use_container_width=True)
@@ -178,6 +179,78 @@ def plotar_indice(df,codigo_sap,data_inicial,data_final):
             grafico_correlação(df)
     except:
         st.warning('⚠️ não existem dados suficientes para o período selecionado.')
+
+def descritivo_especifico(caminho, codigo_aba, indice=0):
+    associa_aba_abreviação = {
+        "IPCA": "IPCA",
+        "INCC": "INCC",
+        "INPC": "INPC",
+        "IGP-M": "IGP-M",
+        "IGP-DI": "IGP-DI",
+        "787": "Met. Básica",
+        "877": "Máqs. e Equip.",
+        "855": "Equip. Elétricos",
+        "757": "Tubos Plásticos",
+        "756": "Conexões Plásticas",
+        "803": "Tubos Fe/Aço",
+        "805": "Conex. Fe/Aço",
+        "878": "Mot./Bomb./Comp.",
+        "643": "Madeira e Deriv.",
+        "741": "Borracha/Plástico",
+        "749": "Prod. Plásticos",
+        "774": "Art. Cimento/Concreto",
+        "815": "Peças Fe Fundido",
+        "881": "Bombas Hidrául."
+    }
+    try:
+
+        # Lê os DataFrames das abas selecionadas
+        dfs = {
+            aba: ler_excel(caminho, aba)
+            .drop(columns=['Índice'])
+            .rename(columns={'Última Atualização': "Periodicidade de Atualização"})
+            .assign(**{"Periodicidade de Atualização": "Mensal"})
+            for aba in codigo_aba
+        }
+
+        # Pega os nomes das colunas da primeira aba (assumindo todas iguais)
+        colunas = dfs[codigo_aba[0]].columns[:12]  # pega no máximo 12
+
+        # Cria a matriz 3x4 de containers
+        rows = [st.columns(4) for _ in range(3)]
+        flat_containers = [col for row in rows for col in row]
+
+        for i, coluna in enumerate(colunas):
+            with flat_containers[i]:
+                with st.container(height=200):
+                    st.markdown(f"**{coluna}**")  # título da coluna
+
+                    # Mostra uma linha por aba selecionada com formatação HTML
+                    for aba in codigo_aba:
+                        valor = dfs[aba].at[indice, coluna]
+                        if valor == '-':
+                            st.markdown(
+                                """
+                                <div style="padding: 8px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; text-align: center;">
+                                    Não se Aplica
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+                        else:
+                            desc = associa_aba_abreviação[aba]
+                            st.markdown(
+                                f"""
+                                <div style="padding: 8px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px;">
+                                    <strong>{desc}:</strong> {valor}
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+    except:
+        st.warning("Selecione um índice")
+
+
 
 
 
