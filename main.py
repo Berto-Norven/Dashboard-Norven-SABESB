@@ -21,11 +21,9 @@ from streamlit import sidebar
 # -------------------------------------------------------------------------------------------------------------------- #
 
 #Importações adicionais:
-from funcoes import ler_excel, grafico_relevancia,plotar_indice,definicao_periodo,escolha_indice,abilitar_correlação_dolar,grafico_correlação,descritivo_especifico
-
-
-
-
+from funcoes import ler_excel, grafico_relevancia, plotar_indice, definicao_periodo, escolha_indice, \
+    abilitar_correlação_dolar, grafico_correlação, descritivo_especifico, definicao_periodos_dinamicos, \
+    escolha_indice_limitado, comparar_indice
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
@@ -40,6 +38,8 @@ elif st.session_state.active_tab == 'Página Inicial':
     st.session_state.sidebar_state = 'expanded'
 elif st.session_state.active_tab == 'Descritivo dos índices':
     st.session_state.sidebar_state = 'expanded'
+elif st.session_state.active_tab == 'Comparativo entre índices':
+    st.session_state.sidebar_state = 'expanded'
 else:
     st.session_state.sidebar_state = 'collapsed'
 
@@ -52,7 +52,7 @@ st.set_page_config(
 
 
 
-guias = ['Página Inicial','Descritivo dos índices','Relevância do índices','Análises específicas','Conclusões Norven']
+guias = ['Página Inicial','Descritivo dos índices','Relevância do índices','Comparativo entre índices','Análises específicas','Conclusões Norven']
 
 st.session_state.active_tab = st.radio("Escolha uma análise:", guias, horizontal=True, label_visibility='collapsed')
 
@@ -176,6 +176,32 @@ elif st.session_state.active_tab == 'Descritivo dos índices':
     escolha_aba = escolha_indice(chave_nome_indice_codigo_aba)
     codigo_aba = [chave_nome_indice_codigo_aba[indice] for indice in escolha_aba]
     descritivo_especifico(caminho_detalhamento_indices,codigo_aba)
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+elif st.session_state.active_tab == 'Comparativo entre índices':
+    escolha_periodos = definicao_periodos_dinamicos()
+
+    chave_nome_indice_codigo_sap2 = descritivo_indices_atualizacao_monetaria_utilizados.set_index('índices')[
+        'Descrição Abreviada'].to_dict()
+
+    escolha_indice = escolha_indice_limitado(chave_nome_indice_codigo_sap2)
+    codigo_sap2 = [chave_nome_indice_codigo_sap2[indice] for indice in escolha_indice]
+
+    Quadro_comparativo =comparar_indice(indices_atualizacao_monetaria, codigo_sap2,escolha_periodos)
+    import io
+
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+        Quadro_comparativo.to_excel(writer, index=False, sheet_name='Comparativo')
+
+    # Depois de sair do bloco 'with', o Excel foi gravado no buffer
+    st.download_button(
+        label="📥 Baixar em Excel",
+        data=buffer.getvalue(),
+        file_name="quadro_comparativo.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )     
 
 
 
