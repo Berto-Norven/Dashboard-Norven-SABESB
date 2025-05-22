@@ -334,7 +334,7 @@ def plotar_indice(df,codigo_sap,data_inicial,data_final):
         st.warning('⚠️ não existem dados suficientes para o período selecionado.')
 
 def descritivo_especifico(caminho, codigo_aba, indice=0):
-    associa_aba_abreviação = {
+associa_aba_abreviação = {
         "IPCA": "IPCA",
         "INCC": "INCC",
         "INPC": "INPC",
@@ -355,7 +355,8 @@ def descritivo_especifico(caminho, codigo_aba, indice=0):
         "815": "Peças Fe Fundido",
         "881": "Bombas Hidrául.",
         "882": "Valv./Torneiras./Reg.",
-        "835": "Equip.Informática"
+        "835": "Equip.Informática",
+        "IPC-FIPE": "IPC-FIPE"
 
 
     }
