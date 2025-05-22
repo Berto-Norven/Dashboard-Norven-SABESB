@@ -353,7 +353,11 @@ def descritivo_especifico(caminho, codigo_aba, indice=0):
         "749": "Prod. Plásticos",
         "774": "Art. Cimento/Concreto",
         "815": "Peças Fe Fundido",
-        "881": "Bombas Hidrául."
+        "881": "Bombas Hidrául.",
+        "882": "Valv./Torneiras./Reg.",
+        "835": "Equip.Informática"
+
+
     }
     try:
 
