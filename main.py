@@ -15,7 +15,8 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import base64
 
-from altair.vegalite.v5.theme import theme
+import altair as alt
+
 from streamlit import sidebar
 
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -202,6 +203,7 @@ elif st.session_state.active_tab == 'Comparativo entre índices':
         file_name="quadro_comparativo.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )     
+
 
 
 
