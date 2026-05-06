@@ -207,11 +207,14 @@ def comparar_indice(df, codigo_sap, escolha_periodos):
                 if coluna == 'INCC':
                     dfg[f'Variação % Mensal_{coluna}'] = dfg[coluna]
                     dfg = dfg.drop(columns=coluna)
-                    dfg[f'Variação % acumulada_{coluna}'] = 0
+                    dfg[f'Variação % acumulada_{coluna}'] = 0.0
                     inicio = dfg[f'Variação % Mensal_{coluna}'].first_valid_index()
                 else:
                     dfg[f'Variação % Mensal_{coluna}'] = dfg[coluna].pct_change() * 100
-                    dfg[f'Variação % acumulada_{coluna}'] = 0
+                    dfg[f'Variação % acumulada_{coluna}'] = 0.0
+
+
+                
                     inicio = dfg[f'Variação % Mensal_{coluna}'].first_valid_index()
 
                 if inicio is not None:
@@ -279,14 +282,16 @@ def plotar_indice(df,codigo_sap,data_inicial,data_final):
             if coluna == 'INCC':
                 df[f'Variação % Mensal_{coluna}'] = df[coluna]
                 df = df.drop(columns=coluna)
-                df[f'Variação % acumulada_{coluna}'] = 0
+                df[f'Variação % acumulada_{coluna}'] = 0.0
                 inicio = df[f'Variação % Mensal_{coluna}'].first_valid_index()
 
 
             else:
                 df[f'Variação % Mensal_{coluna}'] = df[coluna].pct_change() * 100
 
-                df[f'Variação % acumulada_{coluna}'] = 0
+                df[f'Variação % acumulada_{coluna}'] = 0.0
+
+                
                 inicio = df[f'Variação % Mensal_{coluna}'].first_valid_index()
 
             if inicio is not None:
